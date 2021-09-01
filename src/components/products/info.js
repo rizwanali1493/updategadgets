@@ -10,12 +10,19 @@ import { removeFromWishlist } from "../../actions";
 import { getCartTotal } from "../../services";
 import { toast } from "react-toastify";
 import moment from "moment";
-
+// import PatternLock from "react-pattern-lock";
+import Demo from "./pattern";
 class Info extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      isLoading: false,
+      error: false,
+      success: false,
+      disabled: false,
+      size: 3,
+      path: [],
       payment: "stripe",
       first_name: "",
       last_name: "",
@@ -38,8 +45,18 @@ class Info extends Component {
     };
     this.validator = new SimpleReactValidator();
   }
-
+  errorTimeout = 0;
   async componentDidMount() {
+    window.addEventListener("keydown", ({ which }) => {
+      if (which === 38) {
+        this.setState({
+          size: this.state.size >= 10 ? 10 : this.state.size + 1,
+        });
+      } else if (which === 40) {
+        this.setState({ size: this.state.size > 3 ? this.state.size - 1 : 3 });
+      }
+    });
+
     let data = JSON.parse(localStorage.getItem("FormData")) || {};
     if (
       data.first_name ||
@@ -91,11 +108,11 @@ class Info extends Component {
       totalPrice,
     });
     let startDate = JSON.parse(localStorage.getItem("Date") || "");
+    console.log("startdddddddd", startDate);
     let myDate = moment(startDate).toDate();
+    console.log("startdddddmmm", myDate);
 
-    // console.log("mydateeeeee", moment(myDate).format("YYYY-MM-DD"));
-    let finalDate = moment(myDate).format("YYYY-MM-DD");
-
+    let finalDate = moment(myDate).format("MMMM Do YYYY, h:mm a");
     await this.setState({
       startDate: finalDate,
     });
@@ -176,8 +193,41 @@ class Info extends Component {
   handleSelection = () => {
     toast.error("Please Fill the Form First");
   };
+  onReset = () => {
+    this.setState({
+      path: [],
+      success: false,
+      error: false,
+      disabled: false,
+    });
+  };
+
+  onChange = (path) => {
+    this.setState({ path: [...path] });
+  };
+
+  onFinish = () => {
+    this.setState({ isLoading: true });
+    // an imaginary api call
+    setTimeout(() => {
+      if (this.state.path.join("-") === "0-1-2") {
+        this.setState({ isLoading: false, success: true, disabled: true });
+      } else {
+        this.setState({ disabled: true, error: true });
+        this.errorTimeout = window.setTimeout(() => {
+          this.setState({
+            disabled: false,
+            error: false,
+            isLoading: false,
+            path: [],
+          });
+        }, 2000);
+      }
+    }, 1000);
+  };
 
   render() {
+    const { size, path, disabled, success, error, isLoading } = this.state;
     const { cartItems, symbol, total } = this.props;
 
     // Paypal Integration
@@ -385,6 +435,39 @@ class Info extends Component {
                             })}
                           </h6>
                         </div>
+                        <div className="headind1">
+                          {/* <PatternLock
+                            width={300}
+                            pointSize={15}
+                            size={3}
+                            path={this.state.path}
+                            onChange={(pattern) => {
+                              this.setState({ path: pattern });
+                            }}
+                            onFinish={() => {
+                              // check if the pattern is correct
+                            }}
+                          />
+                          <div className="output">
+                            Select the top 3 points starting from the left
+                          </div>
+                          <div className="output">
+                            Output : {this.state.path.join(", ")}
+                          </div>
+                          {success && (
+                            <button
+                              style={{ margin: "0 auto", display: "block" }}
+                              onClick={this.onReset}
+                            >
+                              Click here to reset
+                            </button>
+                          )}
+                          <div className="output">
+                            Press the up/down arrow keys to increase/decrease
+                            the size of the input
+                          </div> */}
+                        </div>
+
                         {/* <div className="headind1">
                           <h6 className="h61">
                             <b>Repair Services :</b>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -427,6 +510,8 @@ class Info extends Component {
                 {/* </form> */}
               </div>
             </div>
+            <Demo />
+
             <div className="row justify-content-center">
               <div className="btuun">
                 {this.state.formDataTrueOrFalse ? (

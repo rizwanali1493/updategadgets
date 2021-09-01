@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  flex-direction: column;
+  color: black;
+  font-weight: bold;
+  font-family: sans-serif;
+  padding: 20px 0;
+}
+
+.react-pattern-lock__pattern-wrapper.error
+  .react-pattern-lock__point-wrapper.selected
+  .react-pattern-lock__point
+  .react-pattern-lock__point-inner {
+  background: black !important;
+}
+.react-pattern-lock__pattern-wrapper
+  .react-pattern-lock__point-wrapper
+  .react-pattern-lock__point
+  .react-pattern-lock__point-inner {
+  background: cyan !important;
+}
+
+.react-pattern-lock__pattern-wrapper.error
+  .react-pattern-lock__connector-wrapper
+  .react-pattern-lock__connector {
+  background: black !important;
+}
+
+.react-pattern-lock__pattern-wrapper
+  .react-pattern-lock__connector-wrapper
+  .react-pattern-lock__connector {
+  background: cyan !important;
+}
+.react-pattern-lock__pattern-wrapper {
+  height: 300px !important;
+  width: 300px !important;
+}

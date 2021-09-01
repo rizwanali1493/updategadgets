@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Breadcrumb from "../common/breadcrumb";
 // import WOW from 'wowjs';
+import moment from "moment";
 
 import {
   filterSort,
@@ -54,7 +55,11 @@ class Bystore extends Component {
     let deviceType = JSON.parse(localStorage.getItem("DeviceType") || "");
     let companyName = JSON.parse(localStorage.getItem("CompanyName") || "");
     let modalName = JSON.parse(localStorage.getItem("ModalName") || "");
+    // let startDate = JSON.parse(localStorage.getItem("Date") || "");
     let startDate = JSON.parse(localStorage.getItem("Date") || "");
+    let myDate = moment(startDate).toDate();
+    let finalDate = moment(myDate).format("MMMM Do YYYY, h:mm a");
+
     let dataa = await JSON.parse(localStorage.getItem("SelectedIssues") || {});
     let data = await JSON.parse(localStorage.getItem("FormData") || {});
     let totalPrice = 0;
@@ -79,7 +84,7 @@ class Bystore extends Component {
       modalName,
       issues,
       totalPrice,
-      startDate,
+      startDate: finalDate,
     });
   }
 
@@ -186,7 +191,7 @@ class Bystore extends Component {
                                   <b> Appointment Date :</b>
                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                   <span className="prob">
-                                    {new Date(this.state.startDate).toString()}
+                                    {this.state.startDate}
                                   </span>
                                 </h6>
                               </div>
