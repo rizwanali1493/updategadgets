@@ -13,6 +13,7 @@ import moment from "moment";
 // import PatternLock from "react-pattern-lock";
 // import PatternLock from "react-pattern-lock";
 // import PatternLock from "react-pattern-lock";
+// import PatternLock from "react-pattern-lock";
 import Demo from "./pattern";
 class Info extends Component {
   constructor(props) {
